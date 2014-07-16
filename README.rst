@@ -36,6 +36,7 @@ appropriate. Then compile the HTML:
 
 ::
 
+    $ make clean
     $ make html
 
 Assuming there are no errors, reload the docs in your browser. If you're happy

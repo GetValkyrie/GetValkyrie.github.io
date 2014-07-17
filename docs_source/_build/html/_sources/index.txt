@@ -12,8 +12,9 @@ Contents:
    :maxdepth: 2
 
    use_contribute
-
-..   README
+   aws-ec2
+   testing
+   todo
 
 Indices and tables
 ==================

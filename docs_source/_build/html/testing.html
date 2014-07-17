@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Continuous Integration &mdash; GetValkyrie 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GetValkyrie 0.1 documentation" href="index.html" />
+    <link rel="next" title="Todo List" href="todo.html" />
+    <link rel="prev" title="AWS EC2" href="aws-ec2.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="todo.html" title="Todo List"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="aws-ec2.html" title="AWS EC2"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GetValkyrie 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="continuous-integration">
+<h1>Continuous Integration<a class="headerlink" href="#continuous-integration" title="Permalink to this headline">¶</a></h1>
+<p>We use Jenkins as the basis of our Continuous Integration system.</p>
+<div class="section" id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this headline">¶</a></h2>
+<p>We currently use AWS EC2, provisioned using the Vagrant AWS plugin, as our
+principle testing platform. We should be able to easily provision full test
+stacks locally, or on any other supported cloud platforms with a minimum of
+modification to the general framework.</p>
+<p>Vagrant allows us to configure servers using a number provisioning options.
+While we prefer <a class="reference external" href="http://puppetlabs.com">Puppet</a> for production environments, for <a class="reference external" href="http://martinfowler.com/bliki/ImmutableServer.html">immutable</a> utility
+servers and prototyping, shell scripts work quite well.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Research Ansible, which appears to be quite straight-forward, in comparison
+to Puppet, and is configured using YAML.</p>
+</div>
+</div>
+<div class="section" id="ec2-ami">
+<h2>EC2 AMI<a class="headerlink" href="#ec2-ami" title="Permalink to this headline">¶</a></h2>
+<p>Since we&#8217;re building test servers, we&#8217;ll often prefer to stick with t2.micro
+instances, as they fall within &#8216;free tier&#8217;. Unfortunately, only HVM AMIs are
+available for t2.micro instances, so we&#8217;ll need to use that AMI (ami-a6d611ce).</p>
+<p>For further details, see the docs for our <a class="reference internal" href="aws-ec2.html#ec2-amis-label"><em>EC2 AMIs</em></a>.</p>
+</div>
+<div class="section" id="jenkins">
+<h2>Jenkins<a class="headerlink" href="#jenkins" title="Permalink to this headline">¶</a></h2>
+<p>We install and configure Jenkins using a shell script. It basically adds the
+Jenkins Debian repo and its key, installs the latest Jenkins, along with
+jenkins-job-builder. It then disables unused plugins.</p>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<p class="last">install useful plugins</p>
+</div>
+<div class="admonition-todo admonition" id="index-2">
+<p class="first admonition-title">Todo</p>
+<p class="last">install jenkins-cli</p>
+</div>
+<div class="admonition-todo admonition" id="index-3">
+<p class="first admonition-title">Todo</p>
+<p class="last">configure jjb</p>
+</div>
+<div class="admonition-todo admonition" id="index-4">
+<p class="first admonition-title">Todo</p>
+<p class="last">create jjb repo for jobs</p>
+</div>
+<div class="admonition-todo admonition" id="index-5">
+<p class="first admonition-title">Todo</p>
+<p class="last">manage jenkins users/config directly in repo</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Continuous Integration</a><ul>
+<li><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li><a class="reference internal" href="#ec2-ami">EC2 AMI</a></li>
+<li><a class="reference internal" href="#jenkins">Jenkins</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aws-ec2.html"
+                        title="previous chapter">AWS EC2</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="todo.html"
+                        title="next chapter">Todo List</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/testing.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="todo.html" title="Todo List"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="aws-ec2.html" title="AWS EC2"
+             >previous</a> |</li>
+        <li><a href="index.html">GetValkyrie 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Christopher Gervais.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

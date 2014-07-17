@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>AWS EC2 &mdash; GetValkyrie 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GetValkyrie 0.1 documentation" href="index.html" />
+    <link rel="next" title="Continuous Integration" href="testing.html" />
+    <link rel="prev" title="GetValkyrie Documentation" href="use_contribute.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="testing.html" title="Continuous Integration"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="use_contribute.html" title="GetValkyrie Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GetValkyrie 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="aws-ec2">
+<h1>AWS EC2<a class="headerlink" href="#aws-ec2" title="Permalink to this headline">¶</a></h1>
+<p>We use AWS EC2 as our principle production cloud environment.</p>
+<div class="section" id="ec2-iam">
+<h2>EC2 IAM<a class="headerlink" href="#ec2-iam" title="Permalink to this headline">¶</a></h2>
+<p>To start, we create an AWS IAM user, so that we use credentials with limited
+access to our AWS account. We then have to create a group with access to
+perform operations on our AWS EC2 account, and add the new user.</p>
+<p>Take note of the &#8216;access_key_id&#8217; and the &#8216;secret_access_key&#8217;, as we&#8217;ll need to
+use them in the Vagrant AWS setup.</p>
+</div>
+<div class="section" id="ec2-ssh-setup">
+<h2>EC2 SSH Setup<a class="headerlink" href="#ec2-ssh-setup" title="Permalink to this headline">¶</a></h2>
+<p>We&#8217;ll need to secure communication between the our local environment, where
+Vagrant is running, and our EC2 instances. We do this by generating a key pair
+in the AWS console, and downloading the private key.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">According to the API docs, we could also generate a keypair locally, and push
+the public key to AWS, using the CLI tools or the API directly.</p>
+</div>
+<p>We&#8217;ll also need to allow inbound SSH traffic to the server. We can do this by
+setting up a new security group (or editing the default one). We&#8217;ll need to
+specify SSH or a custom port, if we don&#8217;t want to use 22. We may need to open
+additional ports, depending on the nature of the server we&#8217;re provisioning
+(http and https will be common, ICMP for health-monitoring ping traffic,
+8080 for Jenkins web UI, etc.)</p>
+<p>Take note of the security group and keypair names, and the path to which you
+downloaded the private key, as we&#8217;ll need to use these in the Vagrant AWS
+setup.</p>
+</div>
+<div class="section" id="vagrant-aws-plugin">
+<h2>Vagrant AWS plugin<a class="headerlink" href="#vagrant-aws-plugin" title="Permalink to this headline">¶</a></h2>
+<p>To automate building and managing EC2 instances, we use Vagrant with the
+<a class="reference external" href="http://rubydoc.info/gems/vagrant-aws/0.5.0/frames">vagrant-aws</a> plugin. Installing this plugin is as easy as:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ vagrant plugin install vagrant-aws
+</pre></div>
+</div>
+<p>You can check that it was properly installed, and the current version of the
+plugin like so:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ vagrant plugin list
+vagrant-aws (0.5.0)
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="ec2-amis">
+<span id="ec2-amis-label"></span><h2>EC2 AMIs<a class="headerlink" href="#ec2-amis" title="Permalink to this headline">¶</a></h2>
+<p>We&#8217;ll use the latest 64-bit Ubuntu (14.04 LTS) AMI so as to have a Debian-based
+system with all the latest packages available. Normally we&#8217;d prefer to use the
+para-virtualized AMI (ami-7cd51214), since it offers better performance.</p>
+<p>However, we may prefer to stick with t2.micro instances, as they fall within
+&#8216;free tier&#8217;. Unfortunately, only HVM AMIs are available for t2.micro instances,
+so we&#8217;ll need to use that AMI (ami-a6d611ce).</p>
+</div>
+<div class="section" id="vagrantfile-configs">
+<h2>Vagrantfile configs<a class="headerlink" href="#vagrantfile-configs" title="Permalink to this headline">¶</a></h2>
+<p>To configure Vagrant to use our AWS account, we need to provide the IAM creden-
+tials (&#8216;access_key_id&#8217; and &#8216;secret_access_key&#8217;) that we generated earlier.</p>
+<p>In order for Vagrant to connect to the EC2 instance (for provisioning, SSH,
+etc.) we need to provide an SSH keypair. In the Vagrant AWS configs, we can
+specify the &#8216;keypair_name&#8217; that we generate above. We also need to override
+Vagrant&#8217;s default SSH user and key:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ssh</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="s">&quot;ubuntu&quot;</span>
+<span class="n">ssh</span><span class="o">.</span><span class="n">private_key_path</span> <span class="o">=</span> <span class="s">&quot;path/to/downloaded/keypair.pem&quot;</span>
+</pre></div>
+</div>
+<p>Finally, we need to add one or more &#8216;tags&#8217;:</p>
+<div class="highlight-python"><div class="highlight"><pre>aws.tags = {
+  &#39;type&#39; =&gt; &#39;Jenkins&#39;,
+  &#39;Name&#39; =&gt; &#39;ci.getvalkyrie.com&#39;,
+}
+</pre></div>
+</div>
+<p>To provision the server, we now run:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ vagrant up --provider=aws
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS EC2</a><ul>
+<li><a class="reference internal" href="#ec2-iam">EC2 IAM</a></li>
+<li><a class="reference internal" href="#ec2-ssh-setup">EC2 SSH Setup</a></li>
+<li><a class="reference internal" href="#vagrant-aws-plugin">Vagrant AWS plugin</a></li>
+<li><a class="reference internal" href="#ec2-amis">EC2 AMIs</a></li>
+<li><a class="reference internal" href="#vagrantfile-configs">Vagrantfile configs</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="use_contribute.html"
+                        title="previous chapter">GetValkyrie Documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="testing.html"
+                        title="next chapter">Continuous Integration</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/aws-ec2.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="testing.html" title="Continuous Integration"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="use_contribute.html" title="GetValkyrie Documentation"
+             >previous</a> |</li>
+        <li><a href="index.html">GetValkyrie 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Christopher Gervais.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

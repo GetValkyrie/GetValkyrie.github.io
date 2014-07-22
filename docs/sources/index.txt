@@ -14,6 +14,7 @@ Contents:
    use_contribute
    aws-ec2
    testing
+   diagrams
    todo
 
 Indices and tables

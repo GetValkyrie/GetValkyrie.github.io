@@ -40,9 +40,11 @@ docs-fix:
 	# Github pages do not support directories beginning with underscores.
 	mv $(DOCSDIR)/_sources $(DOCSDIR)/sources
 	mv $(DOCSDIR)/_static $(DOCSDIR)/static
+	mv $(DOCSDIR)/_images $(DOCSDIR)/images
 	#find $(DOCSDIR) -type f -exec sed -i 's/_sources/sources/g' {} ';'
 	grep -lr "_source" docs | xargs sed -i "s/_source/source/g"
 	grep -lr "_static" docs | xargs sed -i "s/_static/static/g"
+	grep -lr "_images" docs | xargs sed -i "s/_images/images/g"
 	@echo
 	@echo "Fixes finished. Our docs should now work on on Github pages."
 

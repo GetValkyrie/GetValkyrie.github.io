@@ -1,3 +1,5 @@
+.. _AWS-EC2-label:
+
 AWS EC2
 =======
 
@@ -38,6 +40,8 @@ Take note of the security group and keypair names, and the path to which you
 downloaded the private key, as we'll need to use these in the Vagrant AWS
 setup.
 
+
+.. _Vagrant-AWS-label:
 
 Vagrant AWS plugin
 ------------------

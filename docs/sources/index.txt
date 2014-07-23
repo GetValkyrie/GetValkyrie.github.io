@@ -15,6 +15,7 @@ Contents:
    aws-ec2
    testing
    diagrams
+   cloud
    todo
 
 Indices and tables

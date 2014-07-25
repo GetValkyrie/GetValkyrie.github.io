@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>AWS EC2 &mdash; GetValkyrie 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="GetValkyrie 0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Amazon Web Services" href="../aws.html" />
+    <link rel="next" title="EC2 IAM" href="iam.html" />
+    <link rel="prev" title="Amazon Web Services" href="../aws.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="iam.html" title="EC2 IAM"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../aws.html" title="Amazon Web Services"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">GetValkyrie 0.1 documentation</a> &raquo;</li>
+          <li><a href="../aws.html" accesskey="U">Amazon Web Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="aws-ec2">
+<span id="aws-ec2-label"></span><h1>AWS EC2<a class="headerlink" href="#aws-ec2" title="Permalink to this headline">¶</a></h1>
+<p>We use AWS EC2 as our principle production cloud environment.</p>
+<div class="section" id="ec2-ssh-setup">
+<h2>EC2 SSH Setup<a class="headerlink" href="#ec2-ssh-setup" title="Permalink to this headline">¶</a></h2>
+<p>We&#8217;ll need to secure communication between the our local environment, where
+Vagrant is running, and our EC2 instances. We do this by generating a key pair
+in the AWS console, and downloading the private key.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">According to the API docs, we could also generate a keypair locally, and push
+the public key to AWS, using the CLI tools or the API directly.</p>
+</div>
+<p>We&#8217;ll also need to allow inbound SSH traffic to the server. We can do this by
+setting up a new security group (or editing the default one). We&#8217;ll need to
+specify SSH or a custom port, if we don&#8217;t want to use 22. We may need to open
+additional ports, depending on the nature of the server we&#8217;re provisioning
+(http and https will be common, ICMP for health-monitoring ping traffic,
+8080 for Jenkins web UI, etc.)</p>
+<p>Take note of the security group and keypair names, and the path to which you
+downloaded the private key, as we&#8217;ll need to use these in the
+ref:<cite>Vagrant-AWS-label</cite> setup.</p>
+</div>
+<div class="section" id="ec2-amis">
+<span id="ec2-amis-label"></span><h2>EC2 AMIs<a class="headerlink" href="#ec2-amis" title="Permalink to this headline">¶</a></h2>
+<p>We&#8217;ll use the latest 64-bit Ubuntu (14.04 LTS) AMI so as to have a Debian-based
+system with all the latest packages available. Normally we&#8217;d prefer to use the
+para-virtualized AMI (ami-7cd51214), since it offers better performance.</p>
+<p>However, we may prefer to stick with t2.micro instances, as they fall within
+&#8216;free tier&#8217;. Unfortunately, only HVM AMIs are available for t2.micro instances,
+so we&#8217;ll need to use that AMI (ami-a6d611ce).</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS EC2</a><ul>
+<li><a class="reference internal" href="#ec2-ssh-setup">EC2 SSH Setup</a></li>
+<li><a class="reference internal" href="#ec2-amis">EC2 AMIs</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../aws.html"
+                        title="previous chapter">Amazon Web Services</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="iam.html"
+                        title="next chapter">EC2 IAM</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/docs/aws/ec2.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="iam.html" title="EC2 IAM"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../aws.html" title="Amazon Web Services"
+             >previous</a> |</li>
+        <li><a href="../index.html">GetValkyrie 0.1 documentation</a> &raquo;</li>
+          <li><a href="../aws.html" >Amazon Web Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Christopher Gervais.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

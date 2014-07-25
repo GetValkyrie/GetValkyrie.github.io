@@ -12,10 +12,12 @@ Contents:
    :maxdepth: 2
 
    use_contribute
-   aws-ec2
+   vagrant
+   aws
    testing
    diagrams
    cloud
+   accounts
    todo
 
 Indices and tables
